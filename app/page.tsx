@@ -1,9 +1,8 @@
-import Image from 'next/image'
-
-export default function Home() {
+export default function HomePage() {
   return (
-    <main>
-      <h1>Content</h1>
-    </main>
-  )
+    <div>
+      <h1 className="text-2xl">Welcome to My App</h1>
+      <p>This is the content area.</p>
+    </div>
+  );
 }
