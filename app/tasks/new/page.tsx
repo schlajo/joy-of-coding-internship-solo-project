@@ -7,23 +7,29 @@ import axios from "axios";
 import "easymde/dist/easymde.min.css";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { zodResolver } from '@hookform/resolvers/zod';
+import { zodResolver } from "@hookform/resolvers/zod";
 import { createTaskSchema } from "@/app/validationSchemas";
-import { z } from 'zod';
+import { z } from "zod";
+import ErrorMessage from "@/app/components/ErrorMessage";
 
 type TaskForm = z.infer<typeof createTaskSchema>;
 
 const NewTaskPage = () => {
   const router = useRouter();
-  const { register, control, handleSubmit, formState: { errors }} = useForm<TaskForm>({
-    resolver: zodResolver(createTaskSchema)
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<TaskForm>({
+    resolver: zodResolver(createTaskSchema),
   });
   const [error, setError] = useState("");
 
   return (
     <div className="max-w-xl">
       {error && (
-        <Callout.Root color="red" className='mb-5'>
+        <Callout.Root color="red" className="mb-5">
           <Callout.Text>{error}</Callout.Text>
         </Callout.Root>
       )}
@@ -39,7 +45,7 @@ const NewTaskPage = () => {
         })}
       >
         <TextField.Root placeholder="Title" {...register("title")} />
-        {errors.title && <Text color="red" as="p">{errors.title.message}</Text>}
+        <ErrorMessage>{errors.title?.message}</ErrorMessage>
         <Controller
           name="description"
           control={control}
@@ -47,7 +53,7 @@ const NewTaskPage = () => {
             <SimpleMDE placeholder="Description" {...field} />
           )}
         />
-        {errors.description && <Text color="red" as="p">{errors.description.message}</Text>}
+        <ErrorMessage>{errors.description?.message}</ErrorMessage>
         <Button>Submit New Task</Button>
       </form>
     </div>
