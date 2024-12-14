@@ -1,8 +1,11 @@
-export default function HomePage() {
+import React from 'react'
+import { Button } from '@radix-ui/themes';
+import Link from 'next/link';
+
+const HomePage = () => {
   return (
-    <div>
-      <h1 className="text-2xl">Welcome to My App</h1>
-      <p>This is the content area.</p>
-    </div>
-  );
+    <div><Button><Link href='/tasks/new'>New Task</Link></Button></div>
+  )
 }
+
+export default HomePage
