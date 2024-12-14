@@ -1,48 +1,45 @@
-'use client'
+'use client';
 
-import React from "react";
-import { Task } from "@prisma/client";
-import axios from "axios";
+import React from 'react';
+import { FaTrash, FaEdit } from 'react-icons/fa';
+import axios from 'axios';
 
-interface TaskCardProps {
-  task: Task;
-}
+export default function TaskCard({ task }: { task: any }) {
+  const handleDelete = async () => {
+    await axios.delete(`/api/tasks/${task.id}`);
+    window.location.reload(); // Reload to fetch updated tasks
+  };
 
-const TaskCard = ({ task }: TaskCardProps) => {
   const handleStatusChange = async () => {
-    // Update task status to "IN_PROGRESS"
-    await axios.patch(`/api/tasks/${task.id}`, { status: "IN_PROGRESS" });
-    // Optionally trigger revalidation or state update
+    const newStatus = task.status === 'INCOMPLETE' ? 'COMPLETED' : 'INCOMPLETE';
+    await axios.patch(`/api/tasks/${task.id}`, { status: newStatus });
+    window.location.reload();
   };
 
   return (
-    <div className="bg-white p-4 rounded-lg shadow-md dark:bg-gray-800">
-      <h3 className="text-xl font-semibold">{task.title}</h3>
-      <p className="text-sm text-gray-500 dark:text-gray-300">{task.description}</p>
-      <p className="text-sm mt-2">
+    <div className="bg-zinc-800 p-4 rounded-lg shadow-md hover:shadow-lg transition">
+      <h2 className="text-xl font-semibold mb-2">{task.title}</h2>
+      <p className="text-gray-400 mb-4">{task.description}</p>
+      <div className="flex justify-between items-center text-gray-300">
+        <span className="text-sm">{new Date(task.createdAt).toLocaleDateString()}</span>
         <span
-          className={`${
-            task.status === "OPEN"
-              ? "text-green-500"
-              : task.status === "IN_PROGRESS"
-              ? "text-yellow-500"
-              : "text-gray-500"
+          className={`px-2 py-1 rounded ${
+            task.status === 'COMPLETED' ? 'bg-green-500' : 'bg-red-500'
           }`}
         >
-          {task.status}
+          {task.status === 'COMPLETED' ? 'Completed' : 'Incomplete'}
         </span>
-      </p>
-      {task.status !== "CLOSED" && (
-        <button
-          onClick={handleStatusChange}
-          className="mt-2 text-blue-500 hover:text-blue-700"
-        >
-          Mark as In Progress
+      </div>
+      {/* Actions */}
+      <div className="mt-4 flex justify-end gap-2">
+        <button onClick={handleStatusChange} className="text-gray-300 hover:text-green-400">
+          <FaEdit />
         </button>
-      )}
+        <button onClick={handleDelete} className="text-gray-300 hover:text-red-400">
+          <FaTrash />
+        </button>
+      </div>
     </div>
   );
-};
-
-export default TaskCard;
+}
 
