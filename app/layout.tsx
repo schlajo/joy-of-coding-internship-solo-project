@@ -27,7 +27,6 @@ export default function RootLayout({
         <Theme accentColor="sky">
           <Navbar />
           <main className="flex-1 p-5">{children}</main> {/* Page content */}
-          <ThemePanel />
         </Theme>
       </body>
     </html>

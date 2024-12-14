@@ -1,45 +1,68 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { FaTrash, FaEdit } from 'react-icons/fa';
-import axios from 'axios';
+import React from "react";
+import axios from "axios";
+import { FaTrash, FaEdit } from "react-icons/fa";
 
-export default function TaskCard({ task }: { task: any }) {
-  const handleDelete = async () => {
-    await axios.delete(`/api/tasks/${task.id}`);
-    window.location.reload(); // Reload to fetch updated tasks
+export default function TaskCard({
+  task,
+  onUpdate,
+}: {
+  task: any;
+  onUpdate: () => void;
+}) {
+  // Handle status change (mark as In Progress or Completed)
+  const handleStatusChange = async () => {
+    try {
+      await axios.patch(`/api/tasks/${task.id}`, {
+        status: task.status === "IN_PROGRESS" ? "COMPLETED" : "IN_PROGRESS",
+      });
+      onUpdate(); // Refresh task list
+    } catch (error) {
+      console.error("Failed to update task:", error);
+    }
   };
 
-  const handleStatusChange = async () => {
-    const newStatus = task.status === 'INCOMPLETE' ? 'COMPLETED' : 'INCOMPLETE';
-    await axios.patch(`/api/tasks/${task.id}`, { status: newStatus });
-    window.location.reload();
+  // Handle task deletion
+  const handleDelete = async () => {
+    try {
+      await axios.delete(`/api/tasks/${task.id}`);
+      onUpdate(); // Refresh task list
+    } catch (error) {
+      console.error("Failed to delete task:", error);
+    }
   };
 
   return (
-    <div className="bg-zinc-800 p-4 rounded-lg shadow-md hover:shadow-lg transition">
-      <h2 className="text-xl font-semibold mb-2">{task.title}</h2>
+    <div className="bg-gray-800 p-4 rounded-lg shadow-md">
+      <h2 className="text-xl font-bold mb-2">{task.title}</h2>
       <p className="text-gray-400 mb-4">{task.description}</p>
-      <div className="flex justify-between items-center text-gray-300">
-        <span className="text-sm">{new Date(task.createdAt).toLocaleDateString()}</span>
+      <p className="text-gray-300 mb-4">
+        Status:{" "}
         <span
-          className={`px-2 py-1 rounded ${
-            task.status === 'COMPLETED' ? 'bg-green-500' : 'bg-red-500'
-          }`}
+          className={
+            task.status === "COMPLETED"
+              ? "text-green-500 font-semibold"
+              : "text-yellow-500 font-semibold"
+          }
         >
-          {task.status === 'COMPLETED' ? 'Completed' : 'Incomplete'}
+          {task.status}
         </span>
-      </div>
-      {/* Actions */}
-      <div className="mt-4 flex justify-end gap-2">
-        <button onClick={handleStatusChange} className="text-gray-300 hover:text-green-400">
-          <FaEdit />
+      </p>
+      <div className="flex justify-between items-center">
+        <button
+          onClick={handleStatusChange}
+          className="bg-blue-500 text-white px-3 py-1 rounded"
+        >
+          {task.status === "IN_PROGRESS" ? "Mark Completed" : "Mark In Progress"}
         </button>
-        <button onClick={handleDelete} className="text-gray-300 hover:text-red-400">
-          <FaTrash />
+        <button
+          onClick={handleDelete}
+          className="text-red-500 hover:text-red-700"
+        >
+          <FaTrash size={20} />
         </button>
       </div>
     </div>
   );
 }
-
