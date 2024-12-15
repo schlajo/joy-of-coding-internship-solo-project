@@ -15,9 +15,11 @@ model Task {
   title       String   @db.VarChar(255)
   description String   @db.Text
   status      Status   @default(OPEN)
+  important   Boolean  @default(false)  // Add important field
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
+
 
 enum Status {
   OPEN
