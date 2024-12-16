@@ -11,18 +11,17 @@ datasource db {
 }
 
 model Task {
-  id          Int      @id @default(autoincrement())
+  id          String   @id @default(cuid())
   title       String   @db.VarChar(255)
   description String   @db.Text
-  status      Status   @default(OPEN)
-  important   Boolean  @default(false)  // Add important field
+  status      Status   @default(TO_START)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
-
-
 enum Status {
-  OPEN
+  TO_START
   IN_PROGRESS
-  CLOSED
+  COMPLETED
 }
+
+

@@ -2,25 +2,15 @@
 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import TaskCard from '../../components/TaskCard'; // Adjust the path if needed
-
-interface Task {
-  id: number;
-  title: string;
-  description: string;
-  status: 'OPEN' | 'IN_PROGRESS' | 'CLOSED';
-  createdAt: string;
-  updatedAt: string;
-}
+import TaskCard from '../../components/TaskCard';
 
 const ToStartPage = () => {
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const [tasks, setTasks] = useState<any[]>([]);
 
-  // Function to refresh task list after any action
   const fetchTasks = async () => {
     try {
       const response = await axios.get('/api/tasks');
-      const toStartTasks = response.data.filter((task: Task) => task.status === 'OPEN');
+      const toStartTasks = response.data.filter((task) => task.status === 'TO_START');
       setTasks(toStartTasks);
     } catch (error) {
       console.error("Failed to fetch tasks:", error);
@@ -33,9 +23,9 @@ const ToStartPage = () => {
 
   return (
     <div>
-      <h1>To Start Tasks</h1>
-      <div className="task-list">
-        {tasks.map((task: Task) => (
+      <h1 className="text-3xl font-bold mb-6">To Start Tasks</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {tasks.map((task) => (
           <TaskCard key={task.id} task={task} onUpdate={fetchTasks} />
         ))}
       </div>

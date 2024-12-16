@@ -12,7 +12,6 @@ const Navbar = () => {
     { label: "To Start", href: "/tasks/to-start" },
     { label: "In Progress", href: "/tasks/in-progress" },
     { label: "Completed", href: "/tasks/completed" },
-    { label: "Important", href: "/tasks/important" },
   ];
 
   return (

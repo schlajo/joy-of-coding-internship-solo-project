@@ -1,80 +1,64 @@
-import { NextResponse } from 'next/server'; 
-import prisma from '@/prisma/client'; // Ensure the path to your Prisma client is correct
+import { NextResponse } from "next/server";
+import prisma from "../../../../prisma/client";
 
-// GET: Fetch a single task by ID
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+const validStatuses = ["TO_START", "IN_PROGRESS", "COMPLETED"]; // Define allowed statuses
+
+// PATCH: Update task status
+export async function PATCH(
+  request: Request,
+  context: { params: { id: string } }
+) {
   try {
-    const task = await prisma.task.findUnique({
-      where: { id: parseInt(params.id) },
-    });
+    const { id } = context.params; // Safely extract the id
+    const { status } = await request.json();
 
-    if (!task) {
-      return NextResponse.json(
-        { error: 'Task not found' },
-        { status: 404 }
-      );
-    }
-
-    return NextResponse.json(task, { status: 200 });
-  } catch (error) {
-    return NextResponse.json(
-      { error: 'Failed to fetch task' },
-      { status: 500 }
-    );
-  }
-}
-
-// PATCH: Update a task's status or content
-export async function PATCH(request: Request, { params }: { params: { id: string } }) {
-  try {
-    const body = await request.json();
-    const { status } = body;
-
-    console.log("Received PATCH request with status:", status);  // Log the incoming request data
-
-    // Validate that the status is one of the allowed values
-    const validStatuses = ["OPEN", "IN_PROGRESS", "COMPLETED"];
+    // Validate status
     if (status && !validStatuses.includes(status)) {
       return NextResponse.json(
-        { error: 'Invalid status value' },
+        { error: "Invalid status value provided." },
         { status: 400 }
       );
     }
 
-    // Update the task in the database
+    // Update task status
     const updatedTask = await prisma.task.update({
-      where: { id: parseInt(params.id) },
+      where: { id }, // Convert id to number if it's Int in the database
       data: {
-        status,  // Only update the status
+        status: status ?? undefined, // Update only if status is provided
       },
     });
 
-    return NextResponse.json(updatedTask, { status: 200 });
+    return NextResponse.json(updatedTask);
   } catch (error) {
-    console.error("Error updating task:", error);  // Log the error for debugging
+    console.error("Error updating task: ", error);
     return NextResponse.json(
-      { error: 'Failed to update task' },
+      { error: "Failed to update task." },
       { status: 500 }
     );
   }
 }
 
-
-// DELETE: Remove a task by ID
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+// DELETE: Delete a task
+export async function DELETE(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
   try {
-    await prisma.task.delete({
-      where: { id: parseInt(params.id) },
+    const { id } = params; // Extract task ID from params
+
+    const deletedTask = await prisma.task.delete({
+      where: {
+        id // Convert id to number if necessary
+      },
     });
 
-    return NextResponse.json(
-      { message: 'Task deleted successfully' },
-      { status: 200 }
-    );
+    return NextResponse.json(deletedTask, { status: 200 });
   } catch (error) {
+    console.error("Error deleting task:", error);
     return NextResponse.json(
-      { error: 'Failed to delete task' },
+      { error: "Failed to delete task." },
       { status: 500 }
     );
   }
 }
+

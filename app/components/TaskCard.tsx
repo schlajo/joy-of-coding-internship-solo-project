@@ -10,51 +10,45 @@ export default function TaskCard({
   task: any;
   onUpdate: () => void;
 }) {
-  // Function to update the task status to IN_PROGRESS
-  const handleStatusChange = async () => {
+  // Determine next statuses for toggling
+  const getNextStatus = (currentStatus: string, direction: "forward" | "backward") => {
+    const statuses = ["TO_START", "IN_PROGRESS", "COMPLETED"];
+    const currentIndex = statuses.indexOf(currentStatus);
+
+    if (direction === "forward") {
+      return statuses[(currentIndex + 1) % statuses.length]; // Cycle forward
+    } else {
+      return statuses[(currentIndex - 1 + statuses.length) % statuses.length]; // Cycle backward
+    }
+  };
+
+  // Handle status change
+  const handleStatusChange = async (direction: "forward" | "backward") => {
+    const nextStatus = getNextStatus(task.status, direction);
+
     try {
-      await axios.patch(`/api/tasks/${task.id}`, { status: "IN_PROGRESS" });
-      onUpdate(); // Refresh task list
+      await axios.patch(`/api/tasks/${task.id}`, { status: nextStatus });
+      onUpdate(); // Refresh the task list
     } catch (error) {
-      console.error("Failed to update task:", error);
+      console.error(`Failed to update status to ${nextStatus}:`, error);
+      alert("Failed to update status. Check console for details.");
     }
   };
 
-  const handleComplete = async () => {
-    try {
-      await axios.patch(`/api/tasks/${task.id}`, { status: "COMPLETED" });
-      onUpdate(); // Refresh task list
-    } catch (error: any) {  // Use 'any' for error to access its properties
-      console.error("Failed to mark task as completed:", error);
-      alert("Failed to mark task as completed. Check console for details.");
-    }
-  };
-  
-
-  // Function to delete a task
+  // Handle task deletion
   const handleDelete = async () => {
     try {
       await axios.delete(`/api/tasks/${task.id}`);
-      onUpdate(); // Refresh task list
+      onUpdate(); // Refresh the task list
     } catch (error) {
       console.error("Failed to delete task:", error);
-    }
-  };
-
-  // Function to toggle the important status
-  const handleImportantToggle = async () => {
-    try {
-      await axios.patch(`/api/tasks/${task.id}`, {
-        important: !task.important, // Toggle the "important" status
-      });
-      onUpdate(); // Refresh task list
-    } catch (error) {
-      console.error("Failed to update task importance:", error);
+      alert("Failed to delete task. Check console for details.");
     }
   };
 
   return (
     <div className="p-4 bg-gray-800 text-white rounded-lg shadow-md">
+      {/* Title and Description */}
       <h2 className="text-xl font-semibold mb-2">{task.title}</h2>
       <p className="text-gray-400 mb-4">{task.description}</p>
 
@@ -71,49 +65,56 @@ export default function TaskCard({
         {task.status}
       </span>
 
-      {/* Important Badge */}
-      {task.important && (
-        <span className="ml-2 px-2 py-1 rounded text-sm font-semibold bg-red-500 text-white">
-          IMPORTANT
-        </span>
-      )}
-
       {/* Action Buttons */}
-      <div className="mt-4 flex space-x-2">
-        {task.status === "OPEN" && (
-          <button
-            onClick={handleStatusChange}
-            className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded"
-          >
-            Mark as In Progress
-          </button>
-        )}
+      <div className="mt-4 flex gap-2">
+        {/* Forward Status Toggle */}
+        <Button
+          onClick={() => handleStatusChange("forward")}
+          label={`Move to ${getNextStatus(task.status, "forward")}`}
+          color="blue"
+        />
 
-        {task.status !== "COMPLETED" && (
-          <button
-            onClick={handleComplete}
-            className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded"
-          >
-            Mark as Complete
-          </button>
-        )}
+        {/* Backward Status Toggle */}
+        <Button
+          onClick={() => handleStatusChange("backward")}
+          label={`Move to ${getNextStatus(task.status, "backward")}`}
+          color="gray"
+        />
 
-        <button
+        {/* Delete Task */}
+        <Button
           onClick={handleDelete}
-          className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
-        >
-          Delete
-        </button>
-
-        {!task.important && (
-          <button
-            onClick={handleImportantToggle}
-            className="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1 rounded"
-          >
-            Mark as Important
-          </button>
-        )}
+          label="Delete"
+          color="red"
+        />
       </div>
     </div>
   );
 }
+
+/* Reusable Button Component */
+const Button = ({
+  onClick,
+  label,
+  color,
+}: {
+  onClick: () => void;
+  label: string;
+  color: string;
+}) => {
+  const baseStyles =
+    "px-3 py-1 rounded text-white hover:opacity-90 transition-opacity";
+  const colorStyles: { [key: string]: string } = {
+    blue: "bg-blue-500 hover:bg-blue-600",
+    red: "bg-red-500 hover:bg-red-600",
+    gray: "bg-gray-600 hover:bg-gray-700",
+  };
+
+  return (
+    <button onClick={onClick} className={`${baseStyles} ${colorStyles[color]}`}>
+      {label}
+    </button>
+  );
+};
+
+
