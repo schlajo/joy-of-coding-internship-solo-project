@@ -24,7 +24,7 @@ const Navbar = () => {
               className={classnames(
                 "hover:text-gray-300 px-3 py-2 rounded-md transition-colors",
                 {
-                  "bg-green-500 text-white": link.href === currentPath, // Active link style
+                  "bg-blue-500 text-white": link.href === currentPath, // Active link style
                   "text-gray-400": link.href !== currentPath,
                 }
               )}
