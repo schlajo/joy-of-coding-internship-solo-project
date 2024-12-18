@@ -10,7 +10,7 @@ const ToStartPage = () => {
   const fetchTasks = async () => {
     try {
       const response = await axios.get('/api/tasks');
-      const toStartTasks = response.data.filter((task) => task.status === 'TO_START');
+      const toStartTasks = response.data.filter((task: { status: string; }) => task.status === 'TO_START');
       setTasks(toStartTasks);
     } catch (error) {
       console.error("Failed to fetch tasks:", error);
