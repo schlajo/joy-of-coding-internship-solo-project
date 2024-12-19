@@ -78,7 +78,7 @@ export default function TaskCard({
         {/* Edit and Delete Buttons */}
         <div className="flex items-center gap-2">
           <button
-            onClick={() => setIsEditing(true)}
+            onClick={handleOpenModal}
             className="text-blue-500 hover:text-white transition-colors duration-200 p-2 rounded-full"
             title="Edit Task"
           >
