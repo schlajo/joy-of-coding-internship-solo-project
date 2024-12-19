@@ -9,7 +9,7 @@ export async function PATCH(
   context: { params: { id: string } }
 ) {
   try {
-    const { id } = context.params; // Safely extract the id
+    const { id } = context.params;
     const { status } = await request.json();
 
     // Validate status
@@ -22,7 +22,7 @@ export async function PATCH(
 
     // Update task status
     const updatedTask = await prisma.task.update({
-      where: { id }, // Convert id to number if it's Int in the database
+      where: { id },
       data: {
         status: status ?? undefined, // Update only if status is provided
       },
@@ -61,4 +61,3 @@ export async function DELETE(
     );
   }
 }
-

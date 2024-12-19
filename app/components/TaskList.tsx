@@ -3,7 +3,13 @@ import React, { useState } from "react";
 import TaskCard from "../components/TaskCard";
 import TaskModal from "../components/TaskModal";
 
-export default function TaskList({ tasks, onUpdate }: { tasks: any[]; onUpdate: () => void }) {
+export default function TaskList({
+  tasks,
+  onUpdate,
+}: {
+  tasks: any[];
+  onUpdate: () => void;
+}) {
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
 
@@ -39,7 +45,8 @@ export default function TaskList({ tasks, onUpdate }: { tasks: any[]; onUpdate: 
   };
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-[1fr]">
+
       {/* Render Task Cards */}
       {tasks.map((task) => (
         <TaskCard
@@ -53,7 +60,7 @@ export default function TaskList({ tasks, onUpdate }: { tasks: any[]; onUpdate: 
       {/* Add New Task Button */}
       <div
         onClick={() => handleOpenModal()} // Open modal to create a new task
-        className="flex items-center justify-center border-2 border-dashed border-gray-600 rounded-lg p-4 cursor-pointer hover:border-blue-500 transition-all"
+        className="flex items-center justify-center border-2 border-dashed border-gray-600 rounded-lg p-4 cursor-pointer hover:border-blue-500 transition-all min-h-[200px] h-full"
       >
         <span className="text-gray-400 text-lg">+ Add New Task</span>
       </div>

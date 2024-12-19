@@ -3,14 +3,16 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { FaTrash, FaRegEdit } from "react-icons/fa";
-import TaskModal from "./TaskModal"; // Assuming TaskModal is in the same directory
+import TaskModal from "./TaskModal";
 
 export default function TaskCard({
   task,
   onUpdate,
+  onEdit,
 }: {
   task: any;
   onUpdate: () => void;
+  onEdit?: () => void; // Make onEdit optional if needed
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false); // Modal visibility state
   const [isEditing, setIsEditing] = useState(false); // Track edit mode (if needed for inline editing)
@@ -51,42 +53,45 @@ export default function TaskCard({
   };
 
   return (
-    <div className="p-4 bg-gray-800 text-white rounded-lg shadow-md">
-      <h2 className="text-xl font-semibold mb-2">{task.title}</h2>
-      <p className="text-gray-400 mb-4">{task.description}</p>
+    <div className="p-4 bg-gray-800 text-white rounded-lg shadow-md flex flex-col justify-between h-full">
+      <div>
+        <h2 className="text-xl font-semibold mb-2">{task.title}</h2>
+        <p className="text-gray-400 mb-4">{task.description}</p>
+      </div>
 
-      {/* Status Badge */}
-      <span
-        className={`px-2 py-1 rounded text-sm font-semibold ${
-          task.status === "COMPLETED"
-            ? "bg-green-500 text-white"
-            : task.status === "IN_PROGRESS"
-            ? "bg-yellow-500 text-gray-900"
-            : "bg-gray-600 text-gray-200"
-        }`}
-      >
-        {task.status}
-      </span>
+      {/* Bottom Section: Status Badge and Action Buttons */}
+      <div className="flex items-center justify-between mt-2">
+        {/* Status Badge */}
+        <span
+  className={`px-2 py-1 rounded text-sm font-semibold ${
+    task.status === "COMPLETED"
+      ? "bg-green-500 text-white"
+      : task.status === "IN_PROGRESS"
+      ? "bg-yellow-500 text-gray-900"
+      : "bg-gray-600 text-gray-200"
+  }`}
+>
+  {task.status.replace(/_/g, " ").toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase())}
+</span>
 
-      {/* Action Buttons */}
-      <div className="mt-4 flex gap-2">
-        {/* Edit Button (opens the modal) */}
-        <button
-          onClick={handleOpenModal}
-          className="text-blue-500 hover:text-white transition-colors duration-200 p-2 rounded-full"
-          title="Edit Task"
-        >
-          <FaRegEdit size={18} />
-        </button>
 
-        {/* Delete Button */}
-        <button
-          onClick={handleDelete}
-          className="text-blue-500 hover:text-red-600 transition-colors duration-200 p-2 rounded-full"
-          title="Delete Task"
-        >
-          <FaTrash size={18} />
-        </button>
+        {/* Edit and Delete Buttons */}
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setIsEditing(true)}
+            className="text-blue-500 hover:text-white transition-colors duration-200 p-2 rounded-full"
+            title="Edit Task"
+          >
+            <FaRegEdit size={18} />
+          </button>
+          <button
+            onClick={handleDelete}
+            className="text-blue-500 hover:text-red-600 transition-colors duration-200 p-2 rounded-full"
+            title="Delete Task"
+          >
+            <FaTrash size={18} />
+          </button>
+        </div>
       </div>
 
       {/* Task Modal */}
