@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -15,7 +15,7 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="flex border-b mb-5 px-5 h-14 items-center bg-gray-800 text-white">
+    <nav className="flex border-b mb-5 px-9 h-14 items-center bg-gray-800 text-white">
       <ul className="flex space-x-6">
         {links.map((link) => (
           <li key={link.href}>

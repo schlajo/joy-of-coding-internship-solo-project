@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import prisma from "../../../../prisma/client";
 
-const validStatuses = ["TO_START", "IN_PROGRESS", "COMPLETED"]; // Define allowed statuses
+const validStatuses = ["TO_START", "IN_PROGRESS", "COMPLETED"];
 
 // PATCH: Update task status
 export async function PATCH(
@@ -44,11 +44,11 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    const { id } = params; // Extract task ID from params
+    const { id } = params;
 
     const deletedTask = await prisma.task.delete({
       where: {
-        id // Convert id to number if necessary
+        id,
       },
     });
 

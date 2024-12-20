@@ -24,7 +24,7 @@ export default function TaskModal({ isOpen, onClose, task, onSave }: any) {
     <Modal
       isOpen={isOpen}
       onRequestClose={onClose}
-      ariaHideApp={false} // TEMP FIX: Prevent error for missing app element
+      // ariaHideApp={false} // TEMP FIX: Prevent error for missing app element
       className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
     >
       <div className="bg-gray-800 p-6 rounded-lg shadow-lg text-white w-1/3">
@@ -80,4 +80,3 @@ export default function TaskModal({ isOpen, onClose, task, onSave }: any) {
     </Modal>
   );
 }
-
