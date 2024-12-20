@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import "@radix-ui/themes/styles.css";
 import "./theme-config.css";
 import "./globals.css";
-import { Theme, ThemePanel } from "@radix-ui/themes";
+import { Theme } from "@radix-ui/themes";
 import Navbar from "./NavBar";
 
 const inter = Inter({

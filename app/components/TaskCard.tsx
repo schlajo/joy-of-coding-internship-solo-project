@@ -53,7 +53,7 @@ export default function TaskCard({
   };
 
   return (
-    <div className="p-4 bg-gray-800 text-white rounded-lg shadow-md flex flex-col justify-between h-full">
+    <div className="p-4 bg-gray-800 text-white rounded-lg shadow-md flex flex-col justify-between min-h-[200px]">
       <div>
         <h2 className="text-xl font-semibold mb-2">{task.title}</h2>
         <p className="text-gray-400 mb-4">{task.description}</p>
@@ -68,10 +68,10 @@ export default function TaskCard({
       ? "bg-green-500 text-white"
       : task.status === "IN_PROGRESS"
       ? "bg-yellow-500 text-gray-900"
-      : "bg-gray-600 text-gray-200"
+      : "bg-red-500 text-gray-200"
   }`}
 >
-  {task.status.replace(/_/g, " ").toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase())}
+  {task.status.replace(/_/g, " ").toLowerCase().replace(/\b\w/g, (char: string) => char.toUpperCase())}
 </span>
 
 
