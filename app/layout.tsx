@@ -7,7 +7,7 @@ import "./theme-config.css";
 import "./globals.css";
 import { Theme } from "@radix-ui/themes";
 import Navbar from "./NavBar";
-import Modal from "react-modal"; // Import react-modal
+import Modal from "react-modal";
 import { useEffect } from "react";
 
 const inter = Inter({
@@ -20,7 +20,6 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // Use useEffect to ensure Modal.setAppElement runs only on the client side
   useEffect(() => {
     Modal.setAppElement("body");
   }, []);
