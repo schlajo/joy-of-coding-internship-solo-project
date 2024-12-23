@@ -12,10 +12,10 @@ export default function TaskCard({
 }: {
   task: any;
   onUpdate: () => void;
-  onEdit?: () => void; // Make onEdit optional if needed
+  onEdit?: () => void;
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false); // Modal visibility state
-  const [isEditing, setIsEditing] = useState(false); // Track edit mode (if needed for inline editing)
+  const [isEditing, setIsEditing] = useState(false); // Track edit mode
   const [title, setTitle] = useState(task.title); // Editable title
   const [description, setDescription] = useState(task.description); // Editable description
 

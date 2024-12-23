@@ -8,7 +8,6 @@ export default function TaskModal({ isOpen, onClose, task, onSave }: any) {
   const [description, setDescription] = useState(task?.description || "");
   const [status, setStatus] = useState(task?.status || "TO_START");
 
-  // TEMPORARY: Disable aria hiding for debugging
   useEffect(() => {
     if (typeof window !== "undefined") {
       Modal.setAppElement("body");
@@ -24,7 +23,6 @@ export default function TaskModal({ isOpen, onClose, task, onSave }: any) {
     <Modal
       isOpen={isOpen}
       onRequestClose={onClose}
-      // ariaHideApp={false} // TEMP FIX: Prevent error for missing app element
       className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
     >
       <div className="bg-gray-800 p-6 rounded-lg shadow-lg text-white w-1/3">
