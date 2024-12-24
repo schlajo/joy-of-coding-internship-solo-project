@@ -3,16 +3,16 @@ import prisma from "../../../../prisma/client";
 
 const validStatuses = ["TO_START", "IN_PROGRESS", "COMPLETED"];
 
-// PATCH: Update task status
+// PATCH: Update task details (status, title, description)
 export async function PATCH(
   request: Request,
   context: { params: { id: string } }
 ) {
   try {
     const { id } = context.params;
-    const { status } = await request.json();
+    const { status, title, description } = await request.json();
 
-    // Validate status
+    // Validate status if provided
     if (status && !validStatuses.includes(status)) {
       return NextResponse.json(
         { error: "Invalid status value provided." },
@@ -20,11 +20,13 @@ export async function PATCH(
       );
     }
 
-    // Update task status
+    // Update task fields dynamically
     const updatedTask = await prisma.task.update({
       where: { id },
       data: {
-        status: status ?? undefined, // Update only if status is provided
+        title: title ?? undefined, // Update title only if provided
+        description: description ?? undefined, // Update description only if provided
+        status: status ?? undefined, // Update status only if provided
       },
     });
 
