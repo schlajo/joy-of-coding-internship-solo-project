@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState } from "react";
 import TaskCard from "../components/TaskCard";
 import TaskModal from "../components/TaskModal";
@@ -32,6 +33,7 @@ export default function TaskList({
       const url = taskData.id ? `/api/tasks/${taskData.id}` : "/api/tasks";
 
       await fetch(url, {
+        
         method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(taskData),

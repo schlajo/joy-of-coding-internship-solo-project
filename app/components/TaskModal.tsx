@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import { FaTrash, FaRegEdit } from "react-icons/fa";
@@ -72,7 +73,7 @@ export default function TaskModal({ isOpen, onClose, task, onSave }: any) {
             className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded"
           >
             Save
-          </button>
+          </button>   
         </div>
       </div>
     </Modal>
